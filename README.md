@@ -42,11 +42,30 @@ All previously disparate capabilities (English paper writing tips, thesis SOP wo
 
 These files are designed to seamlessly assist either in executing sequentially or simply polishing the style of standard Chinese academic texts.
 
-## Quick usage (recommended order)
+## Detailed Usage Guide
 
-1. Start with `thesis-workflow-skill/workflows/Skill_01_Environment_Setup.md` to prepare toolchain and MCP.
-2. Execute drafting or workflow generation: `Use thesis-workflow skill to draft Chapter 3...`
-3. Edit or polish existing text: `Use thesis-workflow skill to review and polish the introductory paragraph of chapter 2.`
+This Skill acts as a flexible toolbox. You can run the entire pipeline end-to-end (best for piecing together an entire thesis), or invoke specific modules purely for text polishing and structuring. Try using the following example prompts with your code agent (e.g. Claude Code, Codex, Cursor):
+
+### Scenario 1: End-to-End Thesis Generation (Run Workflows in sequence)
+When transforming prior publications into a full thesis, ask your agent to follow the SOP scripts step-by-step:
+1. **Setup**:
+   > "Use the thesis-workflow skill and run `Skill_01_Environment_Setup.md` to configure my workspace."
+2. **Asset Extraction**:
+   > "Now run the Skill 02 workflow script to extract equations and figures from my previous papers located at `./papers`."
+3. **Progressive Drafting**:
+   > "Execute Skill 03 to start drafting Chapter 1. Use the extracted assets and make sure to strictly enforce the terminology and Chinese style patterns."
+4. **Presentation Slides**:
+   > "The thesis compiles successfully. Finally, run Skill 04 to generate Beamer defense slides."
+
+### Scenario 2: Text Polishing and "De-AI-fication" (Apply strictly Patterns)
+If you already have text (either human-written or AI-generated) that feels unnatural or overly verbose, use the strict Chinese academic writing patterns to fix it.
+* **Prompt Example**:
+  > "Use the thesis-workflow skill to review and polish the following text. Strictly apply all formatting, vocabulary, and syntax rules from the `patterns/` directory to remove any AI-like tone and give me a diagnostic report along with the rewritten text: [your text]"
+
+### Scenario 3: Drafting New Sections from Scratch (Learn Examples + Apply Patterns)
+When you don't know how to structure a section (e.g., Introduction or Method overview), you can combine the logical templates in `examples/` with the strict writing rules in `patterns/`.
+* **Prompt Example**:
+  > "Use the thesis-workflow skill to draft my Chapter 3 Method overview. First read `examples/method.md` to learn the logical structure (such as the 'three elements'), then apply the strict Chinese academic rules from the `patterns/` folder to generate the final Chinese text. Use this context: ..."
 
 ## Installation (current package)
 
@@ -59,12 +78,6 @@ Copy skills to `$CODEX_HOME/skills/`:
 ```bash
 mkdir -p "$CODEX_HOME/skills"
 cp -R thesis-workflow-skill "$CODEX_HOME/skills/"
-```
-
-Prompt example:
-
-```text
-Use $thesis-workflow to set up my environment, extract assets from my small-paper LaTeX sources, draft my thesis chapter-by-chapter with compile checks, and generate defense slides.
 ```
 
 ### 2) Claude Code

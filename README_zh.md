@@ -40,13 +40,30 @@
   - `patterns/`：针对中文大论文的严格排版、词汇、句法等“去 AI 味”和格式润色约束
   - `examples/`：英文小论文优秀的行文逻辑和写法案例（抽取自老版本），可用于写作时的逻辑指引
 
-建议按工作流阶段顺序执行，或在单纯撰写与润色中文论文段落时直接调用 `thesis-workflow-skill` 请求审校模式。
+## 详细使用指南 (Detailed Usage)
 
-## 快速开始（推荐顺序）
+本 Skill 被设计为灵活的工具箱。你可以将它完整用于大论文的端到端构建，也可以拆开用于单独段落的审校。建议在使用各种 AI 代码助手（如 Claude Code, GitHub Copilot 终端模式, Cursor 等）时，参照以下方式提问：
 
-1. 从 `thesis-workflow-skill/workflows/Skill_01_Environment_Setup.md` 开始，完成环境与 MCP 工具链就绪。
-2. 扩展或生成内容：`Use thesis-workflow skill to draft Chapter 3...`
-3. 对现有文字进行改写：`Use thesis-workflow skill to review and polish the introductory paragraph of chapter 2.`
+### 场景一：端到端大论文生成 (按序执行 Workflows)
+如果你有一堆小论文资产，想要生成大论文，请严格按 `workflows/` 目录的步骤走：
+1. **环境准备**：
+   > "请使用 thesis-workflow skill，运行 `Skill_01_Environment_Setup.md` 帮我配置当前的论文工作区环境。"
+2. **资产抽取**：
+   > "接下来执行 Skill 02 剧本，从我的 latex 原小论文目录 `./papers` 中抽取公式和图表并保存为 JSON 资产。"
+3. **章节扩写**：
+   > "根据 Skill 03 剧本，开始撰写第一章。请务必结合刚才抽取的资产，并应用规范目录里的全部写作风格（不准有 AI 味）。"
+4. **PPT 生成**：
+   > "大论文已通过编译，请执行 Skill 04 剧本生成答辩用的 Beamer PPT 源码。"
+
+### 场景二：现有文本润色与“去 AI 味” (仅应用 Patterns)
+对于你自己写的或者之前别的 AI 生成的草稿，你可以调用该技能进行严格的审查和改写，让文字真正像理科研究生的手笔。
+* **Prompt 示例**：
+  > "请使用 thesis-workflow skill 帮我审校以下这段背景介绍。请严格应用 `patterns` 目录下的中文理工科毕业论文规范（重点关注 meta-rules 和 patterns-syntax），给我一份诊断报告并重新改写以下文本：[附上你的文本]"
+
+### 场景三：学习小论文逻辑来撰写新章节 (Examples + Patterns)
+当你毫无头绪怎么写某一个专门章节（如 Introduction 介绍或者 Method 方法）时，可以让模型借鉴 `examples` 里的成熟结构，再套用 `patterns` 的中文规范输出。
+* **Prompt 示例**：
+  > "请使用 thesis-workflow skill 帮我撰写第三章的方法概述。请先查阅 `examples/method.md` 中的 'Overview' 结构技巧学习行文逻辑，然后使用 `patterns` 里的中文严厉规范把这节中文草稿写出来。我的研究内容如下：..."
 
 ## 安装方式（当前技能包）
 
@@ -57,12 +74,6 @@
 ```bash
 mkdir -p "$CODEX_HOME/skills"
 cp -R thesis-workflow-skill "$CODEX_HOME/skills/"
-```
-
-使用示例：
-
-```text
-Use $thesis-workflow to set up my environment, extract assets from my small-paper LaTeX sources, draft my thesis chapter-by-chapter with compile checks, and generate defense slides.
 ```
 
 ### 2) Claude Code
