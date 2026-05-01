@@ -104,6 +104,7 @@ cp -R thesis-workflow-skill "$HOME/.gemini/skills/"
 ## 致谢与来源
 
 - Fork 基线项目：[Master-cai/Research-Paper-Writing-Skills](https://github.com/Master-cai/Research-Paper-Writing-Skills)
+- 中文风格规范参考项目：[lmcggg/graduate-thesis-polish-and-write-skill](https://github.com/lmcggg/graduate-thesis-polish-and-write-skill)
 - 方法论来源（公开学习笔记）：[pengsida/learning_research](https://github.com/pengsida/learning_research)
 
 本仓库主要贡献在于：流程工程化、提示词链设计、以及博士论文场景下的自动化实践。

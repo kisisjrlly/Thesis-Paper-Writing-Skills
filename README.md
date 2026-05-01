@@ -108,6 +108,7 @@ cp -R thesis-workflow-skill "$HOME/.gemini/skills/"
 ## Attribution
 
 - Fork baseline: [Master-cai/Research-Paper-Writing-Skills](https://github.com/Master-cai/Research-Paper-Writing-Skills)
+- Chinese polishing patterns reference: [lmcggg/graduate-thesis-polish-and-write-skill](https://github.com/lmcggg/graduate-thesis-polish-and-write-skill)
 - Knowledge roots (open notes): [pengsida/learning_research](https://github.com/pengsida/learning_research)
 
 This repository focuses on workflow engineering, packaging, and practical automation for doctoral thesis production.
