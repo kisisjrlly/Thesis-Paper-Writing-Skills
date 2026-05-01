@@ -1,4 +1,0 @@
-interface:
-  display_name: "Doctoral Thesis Workflow"
-  short_description: "End-to-end SOP for doctoral thesis drafting and defense slides"
-  default_prompt: "Use $doctoral-thesis-workflow to set up environment, extract small-paper assets, draft my thesis chapter-by-chapter with compile checks, and generate defense slides."

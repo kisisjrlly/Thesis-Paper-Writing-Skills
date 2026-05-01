@@ -79,29 +79,21 @@
 
 ## 当前仓库现状
 
-目前已包含基础写作技能包：
+目前所有零散的结构已整合为统一的终端技能包（大一统 Skill）：
 
-- `research-paper-writing/`
-  - `SKILL.md`：写作流程与使用规则
-  - `references/`：分章节写作模板与示例
-  - `agents/openai.yaml`：Agent 元信息
+- `thesis-workflow-skill/`
+  - `SKILL.md`：总调度入口，规定使用方式
+  - `workflows/`：按步骤的 01 到 04 自动化剧本
+  - `patterns/`：针对中文大论文的严格排版、词汇、句法等“去 AI 味”和格式润色约束
+  - `examples/`：英文小论文优秀的行文逻辑和写法案例（抽取自老版本），可用于写作时的逻辑指引
 
-并已新增博士论文自动化剧本目录：
-
-- `doctoral-thesis-workflow/`
-  - `Skill_01_Environment_Setup.md`
-  - `Skill_02_Asset_Extraction.md`
-  - `Skill_03_Thesis_Drafting.md`
-  - `Skill_04_Presentation_Gen.md`
-
-建议按 `01 -> 02 -> 03 -> 04` 顺序执行。
+建议按工作流阶段顺序执行，或在单纯撰写与润色中文论文段落时直接调用 `thesis-workflow-skill` 请求审校模式。
 
 ## 快速开始（推荐顺序）
 
-1. 先执行 `doctoral-thesis-workflow/Skill_01_Environment_Setup.md`，完成环境与 MCP 工具链就绪。
-2. 再执行 `doctoral-thesis-workflow/Skill_02_Asset_Extraction.md`，生成结构化资产中间件。
-3. 然后执行 `doctoral-thesis-workflow/Skill_03_Thesis_Drafting.md`，按章节扩写并循环编译修复。
-4. 最后执行 `doctoral-thesis-workflow/Skill_04_Presentation_Gen.md`，自动生成 Beamer 答辩 PPT。
+1. 从 `thesis-workflow-skill/workflows/Skill_01...` 开始，完成环境与 MCP 工具链就绪。
+2. 扩展或生成内容：`Use thesis-workflow skill to draft Chapter 3...`
+3. 对现有文字进行改写：`Use thesis-workflow skill to review and polish the introductory paragraph of chapter 2.`
 
 ## 安装方式（当前技能包）
 
@@ -111,20 +103,13 @@
 
 ```bash
 mkdir -p "$CODEX_HOME/skills"
-cp -R research-paper-writing "$CODEX_HOME/skills/"
-cp -R doctoral-thesis-workflow "$CODEX_HOME/skills/"
+cp -R thesis-workflow-skill "$CODEX_HOME/skills/"
 ```
 
 使用示例：
 
 ```text
-Use $research-paper-writing to improve my paper's Introduction.
-```
-
-端到端任务示例：
-
-```text
-Use $doctoral-thesis-workflow to set up my environment, extract assets from my small-paper LaTeX sources, draft my thesis chapter-by-chapter with compile checks, and generate defense slides.
+Use $thesis-workflow to set up my environment, extract assets from my small-paper LaTeX sources, draft my thesis chapter-by-chapter with compile checks, and generate defense slides.
 ```
 
 ### 2) Claude Code
@@ -133,22 +118,22 @@ Use $doctoral-thesis-workflow to set up my environment, extract assets from my s
 
 ```bash
 mkdir -p "$HOME/.claude/skills"
-cp -R research-paper-writing "$HOME/.claude/skills/"
-cp -R doctoral-thesis-workflow "$HOME/.claude/skills/"
+cp -R thesis-workflow-skill "$HOME/.claude/skills/"
 ```
 
 项目级安装：
 
 ```bash
 mkdir -p .claude/skills
-cp -R research-paper-writing .claude/skills/
-cp -R doctoral-thesis-workflow .claude/skills/
+cp -R thesis-workflow-skill .claude/skills/
 ```
 
-建议在提示词中显式指定：`Please use the research-paper-writing skill`。
-若希望跑完整流水线，建议使用：`Please use the doctoral-thesis-workflow skill`。
-
 ### 3) Gemini
+
+```bash
+mkdir -p "$HOME/.gemini/skills"
+cp -R thesis-workflow-skill "$HOME/.gemini/skills/"
+```
 
 ```bash
 mkdir -p "$HOME/.gemini/skills"
