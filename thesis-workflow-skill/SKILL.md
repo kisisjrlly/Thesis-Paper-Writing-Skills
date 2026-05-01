@@ -57,6 +57,7 @@ allowed-tools: Read, Write, Edit, Grep, Glob, Bash
 不要在单一会话里加载全部 `patterns/*.md`（耗费 Token 且分散注意力），按部位加载：
 
 - **通用基线（全场景必加载）**：[`patterns/meta-rules.md`](./patterns/meta-rules.md), [`patterns/patterns-vocabulary.md`](./patterns/patterns-vocabulary.md), [`patterns/patterns-syntax.md`](./patterns/patterns-syntax.md)
+- 如果在处理**大论文源码（LaTeX）、代码排版结构**：加挂 [`patterns/patterns-latex.md`](./patterns/patterns-latex.md) (包含针对如北航 v4.1.0 模板的特有宏包和样式约束)
 - 如果在处理**数学/方法**部分：加挂 [`patterns/patterns-math.md`](./patterns/patterns-math.md)
 - 如果在处理**实验与图表**：加挂 [`patterns/patterns-layout.md`](./patterns/patterns-layout.md)
 - 如果在处理**摘要、总结与标题结构**：加挂 [`patterns/patterns-structure.md`](./patterns/patterns-structure.md)
