@@ -63,7 +63,7 @@ skill 会自动把信息写到下面的"我的范例论文"区块里，下次不
 3. **指纹不够用时**（需要对照具体表达、或有深度风格对齐需求），skill 会先用 Grep 搜原文关键片段，再不够才局部 Read 原文某章
 4. **范例论文换了**：skill 会自动重新生成指纹
 
-指纹的具体 schema 见 SKILL.md 的"风格指纹"章节。你可以直接打开 `reference-thesis-fingerprint.md` 查看提取出的样例，不满意可以要求 skill 重建。
+指纹的具体 schema 见 `../references/thesis-polish-protocol.md` 的 "Reference Thesis Mechanism" 章节。你可以直接打开 `reference-thesis-fingerprint.md` 查看提取出的样例，不满意可以要求 skill 重建。
 
 ---
 

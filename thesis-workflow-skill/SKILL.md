@@ -1,73 +1,109 @@
 ---
 name: thesis-workflow
-description: 端到端的学术论文工作流。包含博士/硕士中文毕业论文的自动化写作流水线（环境配置、资产提取、分章扩写、PPT生成），以及中文理工科毕业论文写作风格规范与润色规则。提取并融合了小论文的部分核心经验到大论文流程中。
-user-invocable: true
-allowed-tools: Read, Write, Edit, Grep, Glob, Bash
+description: End-to-end doctoral/master thesis workflow for Chinese graduate dissertations, with BUAA thesis format as the authoritative target. Use when Codex needs to turn prior papers or LaTeX assets into a Beihang/BUAA thesis, extract equations/figures/citations from paper sources, draft or revise thesis chapters, enforce rigorous Chinese STEM dissertation style, adapt the BUAA LaTeX 4.1.0 template, generate defense Beamer slides, or review/polish existing Chinese thesis text to reduce AI-like tone while preserving academic rigor.
 ---
 
-# thesis-workflow: 学术论文端到端工作流与写作规范
+# thesis-workflow
 
-本 Skill 旨在打造一个从早期语料加工到最终定稿、生成答辩材料的"端到端"（End-to-End）论文处理助手。既可以作为 **SOP（标准作业程序）** 按步骤执行论文的自动撰写任务，也可以作为 **审查与风格约束器** 对已有中文论文文本进行严厉去 AI 味的改写。
+Use this skill as a thesis production operating system, not as a one-shot writing prompt. Work incrementally, keep every claim traceable to source material, and preserve a compilable LaTeX project after each meaningful edit.
 
-## 适用场景（When to use）
+## First Decision
 
-- **从零构建大论文**：你有一堆发表过的小论文 LaTeX 源码，希望把它们拼成一本逻辑通顺的中文大论文。
-- **论文正文撰写/改写**：你写了一段文字，觉得不够学术、带有明显 AI 翻译腔，要求改成“像活人写的理工科中文论文”。
-- **答辩材料生成**：大论文已完稿，需要自动提取内容制作 Beamer PPT。
-- **研究记录梳理**：从小论文源码中抽取公式、数据、伪图表等资产核心，规范化存储。
+Classify the user's request into one primary mode:
 
-## 目录库结构 
+| Mode | User intent | Load first |
+| --- | --- | --- |
+| Environment | Prepare a thesis workspace or toolchain | `workflows/Skill_01_Environment_Setup.md` |
+| Extraction | Parse prior paper sources into reusable assets | `workflows/Skill_02_Asset_Extraction.md`, `scripts/extract_latex_assets.py` |
+| Drafting | Write or expand a thesis chapter | `workflows/Skill_03_Thesis_Drafting.md`, relevant `patterns/*` |
+| Polish/Review | Diagnose or rewrite existing Chinese thesis text | `references/buaa-format-authority.md`, `references/thesis-polish-protocol.md`, `patterns/meta-rules.md`, relevant `patterns/patterns-*.md` |
+| Slides | Produce defense slides from a finished thesis | `workflows/Skill_04_Presentation_Gen.md` |
 
-为了让你方便调用，本地资产按以下四个目录组织：
+If the mode is clear from files or wording, proceed. Ask only for missing thesis-specific inputs that cannot be inferred safely, such as source paper paths, target chapter, template path, or reference thesis path.
 
-1. `workflows/`：包含按照阶段划分的自动构建流水线，推荐以 `01 -> 02 -> 03 -> 04` 的顺序运行。
-2. `patterns/`：包含对于中文毕业论文强约束的句法、词汇、数学符号、结构等详细排版规则，以及 `meta-rules.md`、`reference-thesis.md` 相关的样式控制。
-3. `examples/`：存放英文或中文优秀的小论文结构思路（Abstract, Introduction, Method 等技巧的浓缩）。这些材料作为启发，但在撰写中文大论文时需套用 `patterns` 的语言限制。
-4. `agents/`：可选配代理模型相关设定。
+## Resource Map
 
----
+- `workflows/`: SOPs for the four-stage pipeline. Read only the workflow matching the active stage.
+- `patterns/`: Chinese STEM dissertation style constraints. Load selectively using the routing table below.
+- `examples/`: English paper-writing logic examples. Use them for structure only, then output in the Chinese dissertation style defined by `patterns/`.
+- `references/buaa-format-authority.md`: Highest-priority formatting source for BUAA thesis work. Use it to override imported or generic formatting advice.
+- `references/project-profile.md`: Optional project memory for research topic, school template, term locks, source-paper paths, and chapter plan. Read it before drafting. If absent or blank, create/update it only when the user gives stable project facts.
+- `references/thesis-polish-protocol.md`: Prose-only Chinese writing/review protocol adapted from `graduate-thesis-polish-and-write-skill`; use it for language, AI-tone, and conservative editing, not for BUAA formatting decisions.
+- `scripts/extract_latex_assets.py`: Deterministic extractor for equations, algorithms, figures/tables, citations, references, and claim-like sentences from `.tex` sources.
 
-## 一、自动化写作流水线（Workflows）
+## Non-Negotiable Workflow Rules
 
-当用户希望“跑剧本”或者“从头生成”大论文时，按照这些 SOP 文档里的要求引导或自动执行：
+1. Do not generate a whole dissertation in one pass. Work by chapter, section, or a clearly bounded file set.
+2. Do not invent evidence. Every formula, figure, algorithm, citation, and strong claim must come from extracted assets, user-provided context, or explicitly marked assumptions.
+3. Treat BUAA LaTeX 4.1.0 and the bundled BUAA writing/template instructions as the formatting authority. Any imported polish rule, reference thesis habit, or generic LaTeX preference loses when it conflicts with BUAA.
+4. Keep LaTeX compilable. After editing thesis sources, run the smallest relevant XeLaTeX build loop and fix errors minimally.
+5. Preserve user writing unless asked to rewrite. In review mode, prefer diagnosis and targeted edits over wholesale replacement.
+6. Never copy conversational phrasing into thesis text. Convert the user's discussion into independent academic prose.
+7. Keep outputs clean. In writing mode, provide usable thesis text or patch content; avoid explaining which style rules were followed unless the user asks for a report.
 
-- **阶段 01：[工具与环境准备](./workflows/Skill_01_Environment_Setup.md)**
-  初始化 MCP 配置、`uv`、文献引用服务等底层支撑。
-- **阶段 02：[资产无损抽取](./workflows/Skill_02_Asset_Extraction.md)**
-  从小论文的 `.tex` 源码中抽走核心公式、图片指令、伪代码逻辑，转存为中间产物，保证不丢数学上的严谨性。
-- **阶段 03：[章节循环扩写与编译修正](./workflows/Skill_03_Thesis_Drafting.md)** （**核心**）
-  结合阶段02获取的资产与论文模板结构，一章一章地滚动扩写。每写完一章就会编译测试错误。此处**必须加载二、写作风格规范**来约束写出来的中文内容。
-- **阶段 04：[Beamer 答辩幻灯片生成](./workflows/Skill_04_Presentation_Gen.md)**
-  利用成品生成的最终 `.tex` 或结构化数据，倒推浓缩摘要并自动编排带有论文关键图表的答辩 PPT 源码。
+## Pattern Loading
 
----
+Load `patterns/meta-rules.md` for all writing or review tasks. Add only the modules needed for the current target:
 
-## 二、中文写作风格严厉约束（Patterns / Polish）
+| Target | Add these modules |
+| --- | --- |
+| General Chinese prose | `patterns-vocabulary.md`, `patterns-syntax.md` |
+| Abstract, introduction, conclusion, chapter titles | `patterns-structure.md` |
+| Method, derivation, theorem, proof, assumptions | `patterns-math.md` |
+| Experiments, tables, figures, captions | `patterns-layout.md` |
+| LaTeX source editing or BUAA template work | `references/buaa-format-authority.md`, `patterns-latex.md` |
+| Reference-thesis alignment | `patterns/reference-thesis.md`; then read `patterns/reference-thesis-fingerprint.md` if it exists |
 
-当处于**阶段03**扩写，或者当用户主动要求“润色”、“检查”现有的一段文字时：
+Use `examples/introduction.md`, `examples/method.md`, `examples/experiments.md`, and related examples only when structural guidance is needed. Do not imitate English phrasing directly.
 
-这是确保论文“不被人看穿是AI写的”生命线。你**必须同等重视**：
+## Stage Guidance
 
-### 核心自测两问
-写完/改完后内部默念：
-1. **删除测试**：把这句话删掉或者压缩一半，信息量掉了吗？没掉就说明这是AI凑字数的废话，删去。
-2. **范例测试**：这种说法会在用户指定的标准博士/硕士论文里出现吗？不会就得重写。
+### Environment
 
-### 规则模块加载
-不要在单一会话里加载全部 `patterns/*.md`（耗费 Token 且分散注意力），按部位加载：
+Follow `workflows/Skill_01_Environment_Setup.md`. Report available tools, missing tools, and exact next actions. Do not install or rewrite system configuration unless the user explicitly wants setup changes.
 
-- **通用基线（全场景必加载）**：[`patterns/meta-rules.md`](./patterns/meta-rules.md), [`patterns/patterns-vocabulary.md`](./patterns/patterns-vocabulary.md), [`patterns/patterns-syntax.md`](./patterns/patterns-syntax.md)
-- 如果在处理**大论文源码（LaTeX）、代码排版结构**：加挂 [`patterns/patterns-latex.md`](./patterns/patterns-latex.md) (包含针对如北航 v4.1.0 模板的特有宏包和样式约束)
-- 如果在处理**数学/方法**部分：加挂 [`patterns/patterns-math.md`](./patterns/patterns-math.md)
-- 如果在处理**实验与图表**：加挂 [`patterns/patterns-layout.md`](./patterns/patterns-layout.md)
-- 如果在处理**摘要、总结与标题结构**：加挂 [`patterns/patterns-structure.md`](./patterns/patterns-structure.md)
+### Extraction
 
-### “小论文思维”融入
-在 `examples/` 目录下存放了如 `introduction.md`, `method.md` 的精华法则（虽然源自英文小论文，但逻辑通用）。
-- 当遇到“引言写不深”、“过渡生硬”时，不妨检索 `examples/` 中的套路指导，然后用 `patterns` 中的中文语法规范来输出。
+Run the extractor when the user provides prior paper sources:
 
-## 执行原则
+```bash
+python thesis-workflow-skill/scripts/extract_latex_assets.py --source <paper_tex_dir> --output <asset_output_dir>
+```
 
-1. **先收集背景，不要盲目输出**：你总是问清用户目前所处的阶段是什么（是要润色还是要按流程提取语料）。如果涉及风格，先问有没有参照对象（参见 `patterns/reference-thesis.md` 里的风格指纹机制）。
-2. **文本生成要求“冰冷干燥纯客观”**：不使用夸张连接词（“综上所述”、“值得注意的是”），不出现空洞的分析，不用“进行了XX的分析”（直接用“分析XX”），杜绝对着定理之前硬塞情感铺垫。
-3. **输出纯净**：给用户的只能是符合排版和 LaTeX（如果需要）要求的直接可用代码或纯文字。结尾不得说“我已经去除了AI味”或解释你命中了什么规则。如果在审校模式下，按要求给出“建议改写列表”加命中编号即可。
+Use `--topic` for project-specific tags when useful. Inspect `summary.json` and unresolved references before drafting.
+
+### Drafting
+
+Before writing, read `references/project-profile.md` and `references/buaa-format-authority.md` if available, then read the relevant extracted JSON files. Build a chapter-level plan with:
+
+- section purpose;
+- asset IDs to reuse;
+- claims and evidence;
+- expected figures, tables, equations, and citations.
+
+Then draft one section at a time. For `.tex` output, preserve labels and citations, use the BUAA template's existing macros and structure, and run a compile check before moving on.
+
+### Polish/Review
+
+Read `references/buaa-format-authority.md` and `references/thesis-polish-protocol.md`, then choose one of three outputs based on the user's wording:
+
+- `diagnosis`: list concrete issues with locations, rule IDs, and suggested fixes;
+- `rewrite`: provide the revised text while preserving the author's structure;
+- `patch`: edit the target `.tex` file directly, changing only prose unless asked otherwise.
+
+Use the protocol's reference-thesis mechanism when the user provides or has configured a style reference, but only for prose style. For `.tex`, do not alter math environments, citation keys, labels, BUAA template macros, or formatting conventions unless the issue is specifically about LaTeX repair.
+
+### Slides
+
+Follow `workflows/Skill_04_Presentation_Gen.md`. Convert the thesis into a defense narrative: problem, method, evidence, conclusion. Reuse thesis figures only after checking paths and readability.
+
+## Quality Gates
+
+Before finishing a substantial task, verify the relevant gates:
+
+- `provenance`: major claims map to assets, citations, experiments, or user-provided facts;
+- `style`: output passes deletion test and reference-thesis test from `patterns/meta-rules.md`;
+- `format`: BUAA LaTeX 4.1.0 and bundled BUAA writing/template requirements override imported polish or generic formatting rules;
+- `latex`: edited sources compile or the remaining compile blocker is clearly reported;
+- `scope`: only the requested chapter/section/files were changed;
+- `handoff`: next step is obvious from generated reports or file names.

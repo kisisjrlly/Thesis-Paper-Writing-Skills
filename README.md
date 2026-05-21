@@ -9,15 +9,25 @@ This repository is a **personalized fork-and-rebuild** project based on:
 My target is not just "paper writing tips", but an **end-to-end doctoral thesis workflow**:
 
 - Input: multiple conference/journal paper assets (LaTeX sources)
-- Template: doctoral thesis `.cls`/`.tex` constraints
+- Template: the BUAA/Beihang graduate thesis LaTeX 4.1.0 `.cls`/`.tex` constraints
 - Output: thesis manuscript + defense slides
 
 In short, I want to build a **zero-friction academic production pipeline** for AI coding agents.
 
+## Project Goal And Rule Priority
+
+This repository targets **BUAA/Beihang doctoral and master thesis writing**, not a generic university thesis template. For anything involving thesis format, LaTeX structure, figure/table numbering, equation spacing, bibliography style, cover/title pages, abstract keywords, symbol tables, abbreviations, table of contents, headers, footers, or other formal layout requirements, follow this priority:
+
+1. Explicit requirements from the user, supervisor, college, or university;
+2. Files and documentation under `北航硕博士学位论文模版-LaTeX 4.1.0/`, especially the README, `main.tex`, `buaa.cls`, and bundled writing specifications;
+3. This skill's `references/buaa-format-authority.md` and `patterns/patterns-latex.md`.
+
+This project also **borrows and adapts** Chinese thesis prose-review ideas from [lmcggg/graduate-thesis-polish-and-write-skill](https://github.com/lmcggg/graduate-thesis-polish-and-write-skill), including AI-tone diagnosis, sentence tightening, terminology consistency, reference-thesis fingerprints, and review-report workflows. That project was written from another school's thesis-writing experience, so in this repository it is used only as **Chinese prose and review guidance**, not as a BUAA formatting authority. If an imported polish rule conflicts with the BUAA template or BUAA writing requirements, the BUAA rule wins.
+
 ## Why this repository exists
 
 The original project provides high-quality writing strategies and prompt patterns.
-This fork extends it toward an **agentic SOP system** so models can execute tasks in sequence instead of one-shot generation, and enforces strict Chinese academic writing styles for graduate theses.
+This fork extends it toward an **agentic SOP system** so models can execute asset extraction, chapter drafting, compile repair, Chinese prose review, and defense-material generation in sequence instead of one-shot generation.
 
 ## Reality check (important)
 
@@ -36,9 +46,14 @@ All previously disparate capabilities (English paper writing tips, thesis SOP wo
 
 - `thesis-workflow-skill/`
   - `SKILL.md`: Main routing and usage definition.
+  - `agents/openai.yaml`: UI metadata for Codex skill discovery.
   - `workflows/`: Automated SOP scripts 01 to 04.
-  - `patterns/`: Strict formatting, vocabulary, and syntax constraints designed to remove "AI tone" from Chinese thesis writing.
+  - `patterns/`: Chinese prose, vocabulary, syntax, and local LaTeX constraints for thesis writing; BUAA formatting authority is separated in `references/buaa-format-authority.md`.
   - `examples/`: Excellent narrative logic and examples (derived from older English paper resources) meant for structural inspiration.
+  - `references/buaa-format-authority.md`: Highest-priority BUAA formatting authority derived from the BUAA LaTeX 4.1.0 template.
+  - `references/project-profile.md`: Optional project memory for topic, term locks, source paths, and chapter plan.
+  - `references/thesis-polish-protocol.md`: Prose-only Chinese thesis writing/review protocol adapted from `graduate-thesis-polish-and-write-skill`.
+  - `scripts/extract_latex_assets.py`: Deterministic LaTeX asset extractor used by the extraction workflow.
 
 These files are designed to seamlessly assist either in executing sequentially or simply polishing the style of standard Chinese academic texts.
 
@@ -60,7 +75,7 @@ When transforming prior publications into a full thesis, ask your agent to follo
 ### Scenario 2: Text Polishing and "De-AI-fication" (Apply strictly Patterns)
 If you already have text (either human-written or AI-generated) that feels unnatural or overly verbose, use the strict Chinese academic writing patterns to fix it.
 * **Prompt Example**:
-  > "Use the thesis-workflow skill to review and polish the following text. Strictly apply all formatting, vocabulary, and syntax rules from the `patterns/` directory to remove any AI-like tone and give me a diagnostic report along with the rewritten text: [your text]"
+  > "Use the thesis-workflow skill to review and polish the following text. Apply the Chinese prose, vocabulary, and syntax rules from the `patterns/` directory to reduce AI-like tone, while keeping BUAA formatting governed by the BUAA template: [your text]"
 
 ### Scenario 3: Drafting New Sections from Scratch (Learn Examples + Apply Patterns)
 When you don't know how to structure a section (e.g., Introduction or Method overview), you can combine the logical templates in `examples/` with the strict writing rules in `patterns/`.
@@ -76,8 +91,8 @@ Assume you are in repository root.
 Copy skills to `$CODEX_HOME/skills/`:
 
 ```bash
-mkdir -p "$CODEX_HOME/skills"
-cp -R thesis-workflow-skill "$CODEX_HOME/skills/"
+mkdir -p "${CODEX_HOME:-$HOME/.codex}/skills"
+cp -R thesis-workflow-skill "${CODEX_HOME:-$HOME/.codex}/skills/"
 ```
 
 ### 2) Claude Code
@@ -108,7 +123,7 @@ cp -R thesis-workflow-skill "$HOME/.gemini/skills/"
 ## Attribution
 
 - Fork baseline: [Master-cai/Research-Paper-Writing-Skills](https://github.com/Master-cai/Research-Paper-Writing-Skills)
-- Chinese polishing patterns reference: [lmcggg/graduate-thesis-polish-and-write-skill](https://github.com/lmcggg/graduate-thesis-polish-and-write-skill)
+- Chinese prose polishing workflow adapted from: [lmcggg/graduate-thesis-polish-and-write-skill](https://github.com/lmcggg/graduate-thesis-polish-and-write-skill). Formatting remains governed by the BUAA LaTeX 4.1.0 template.
 - Knowledge roots (open notes): [pengsida/learning_research](https://github.com/pengsida/learning_research)
 
 This repository focuses on workflow engineering, packaging, and practical automation for doctoral thesis production.

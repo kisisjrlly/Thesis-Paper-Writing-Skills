@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thesis Workflow"
+  short_description: "博士/硕士论文写作、审校、资产抽取与 LaTeX 流水线"
+  default_prompt: "Use $thesis-workflow to extract assets from my paper sources and draft the next thesis chapter with Chinese dissertation style constraints."
