@@ -29,7 +29,7 @@ Use when the user asks to draft, expand, write an abstract, write an introductio
 1. Load `patterns/meta-rules.md`.
 2. Load `references/buaa-format-authority.md` for any BUAA `.tex`, caption, formula-spacing, or layout-sensitive work.
 3. Load only the relevant `patterns/patterns-*.md` files using the routing table in `SKILL.md`.
-4. Check `patterns/reference-thesis.md`. If a reference thesis is configured, prefer its fingerprint over the original file for prose style.
+4. Check `<active-thesis-root>/.thesis-workflow/reference-thesis.md`. If a reference thesis is configured, prefer its fingerprint over the original file for prose style.
 5. Before drafting, identify the 3-5 most likely prose failures for the current section.
 6. Draft directly in compliant prose. Do not draft loosely and then cosmetically polish.
 7. Re-run the two core tests and `meta-rules` K1/K2.
@@ -41,7 +41,7 @@ Use when the user says review, polish, diagnose, check AI tone, inspect a chapte
 
 1. Load `patterns/meta-rules.md` and only relevant pattern files.
 2. Load `references/buaa-format-authority.md` before commenting on format.
-3. Read `patterns/reference-thesis.md` path fields, not the full reference thesis.
+3. Read `<active-thesis-root>/.thesis-workflow/reference-thesis.md` path fields, not the full reference thesis.
 4. Read the requested scope: paragraph, section, `.tex` file, or selected line range.
 5. If the user did not specify the output type, default to diagnosis for large scopes and direct rewrite for short pasted text.
 6. Record each issue with location, original snippet, rule ID, severity, and concrete suggestion.
@@ -60,8 +60,9 @@ The prose effect is best when the user provides one or more same-field reference
 
 When writing or reviewing Chinese thesis prose:
 
-- If `patterns/reference-thesis.md` has a configured path, use that as the prose style anchor.
-- If the user provides a reference path in the current request, validate the path and update `patterns/reference-thesis.md`.
+- If `<active-thesis-root>/.thesis-workflow/reference-thesis.md` has a configured path, use that as the prose style anchor.
+- If the user provides a reference path in the current request, validate the path and update `<active-thesis-root>/.thesis-workflow/reference-thesis.md`.
+- If `.thesis-workflow/reference-thesis.md` is missing, copy the template from `patterns/reference-thesis.md` into the active thesis project's `.thesis-workflow/` directory first.
 - If no reference is configured, continue in pure-rule mode when the user wants to proceed; mention once that style anchoring is weaker without a reference thesis.
 
 ### Fingerprint
@@ -69,7 +70,7 @@ When writing or reviewing Chinese thesis prose:
 Store the compact style fingerprint at:
 
 ```text
-patterns/reference-thesis-fingerprint.md
+<active-thesis-root>/.thesis-workflow/reference-thesis-fingerprint.md
 ```
 
 Generate or update it when:
@@ -77,7 +78,7 @@ Generate or update it when:
 - a reference thesis is first configured;
 - the user changes/adds/removes a reference thesis;
 - the user asks to rebuild the fingerprint;
-- `patterns/reference-thesis.md` changed but the fingerprint is missing or stale.
+- `.thesis-workflow/reference-thesis.md` changed but the fingerprint is missing or stale.
 
 Fingerprint schema:
 
@@ -126,7 +127,7 @@ Prefer short original excerpts over paraphrase; paraphrase loses style signal.
 
 Use the cheapest sufficient source:
 
-1. Load `patterns/reference-thesis-fingerprint.md`.
+1. Load `<active-thesis-root>/.thesis-workflow/reference-thesis-fingerprint.md`.
 2. If needed, search the original reference thesis for a short phrase.
 3. If still insufficient, read only the relevant chapter or page range.
 4. Never load the whole reference thesis without a bounded reason.

@@ -51,7 +51,7 @@
   - `patterns/`：针对中文大论文的行文、词汇、句法与局部 LaTeX 约束；北航格式裁决权单独放在 `references/buaa-format-authority.md`
   - `examples/`：英文小论文优秀的行文逻辑和写法案例（抽取自老版本），可用于写作时的逻辑指引
   - `references/buaa-format-authority.md`：从北航 LaTeX 4.1.0 模板提炼的最高格式依据
-  - `references/project-profile.md`：可选的项目画像，用于记录研究主题、术语锁定、源码路径和章节计划
+  - `references/project-profile.md`：项目画像模板；真实项目状态应放在论文项目的 `.thesis-workflow/project-profile.md`
   - `references/thesis-polish-protocol.md`：从 `graduate-thesis-polish-and-write-skill` 改造而来的中文行文/审校协议，只管语言表达，不覆盖北航格式
   - `scripts/extract_latex_assets.py`：供资产抽取流程调用的确定性 LaTeX 解析脚本
 
@@ -79,6 +79,19 @@
 当你毫无头绪怎么写某一个专门章节（如 Introduction 介绍或者 Method 方法）时，可以让模型借鉴 `examples` 里的成熟结构，再套用 `patterns` 的中文规范输出。
 * **Prompt 示例**：
   > "请使用 thesis-workflow skill 帮我撰写第三章的方法概述。请先查阅 `examples/method.md` 中的 'Overview' 结构技巧学习行文逻辑，然后使用 `patterns` 里的中文严厉规范把这节中文草稿写出来。我的研究内容如下：..."
+
+### 运行时状态放在哪里
+
+skill 包本身应保持可重复安装，不存放个人论文路径、范例论文信息或风格指纹。具体论文项目的状态建议放在论文项目根目录下：
+
+```text
+.thesis-workflow/
+├── project-profile.md
+├── reference-thesis.md
+└── reference-thesis-fingerprint.md
+```
+
+这些文件可能包含本机路径、论文规划和范例论文摘录，默认不建议推送到公开仓库。
 
 ## 安装方式（当前技能包）
 

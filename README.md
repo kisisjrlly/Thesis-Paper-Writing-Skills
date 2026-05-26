@@ -51,7 +51,7 @@ All previously disparate capabilities (English paper writing tips, thesis SOP wo
   - `patterns/`: Chinese prose, vocabulary, syntax, and local LaTeX constraints for thesis writing; BUAA formatting authority is separated in `references/buaa-format-authority.md`.
   - `examples/`: Excellent narrative logic and examples (derived from older English paper resources) meant for structural inspiration.
   - `references/buaa-format-authority.md`: Highest-priority BUAA formatting authority derived from the BUAA LaTeX 4.1.0 template.
-  - `references/project-profile.md`: Optional project memory for topic, term locks, source paths, and chapter plan.
+  - `references/project-profile.md`: Project-profile template; real project state belongs in the thesis project's `.thesis-workflow/project-profile.md`.
   - `references/thesis-polish-protocol.md`: Prose-only Chinese thesis writing/review protocol adapted from `graduate-thesis-polish-and-write-skill`.
   - `scripts/extract_latex_assets.py`: Deterministic LaTeX asset extractor used by the extraction workflow.
 
@@ -81,6 +81,19 @@ If you already have text (either human-written or AI-generated) that feels unnat
 When you don't know how to structure a section (e.g., Introduction or Method overview), you can combine the logical templates in `examples/` with the strict writing rules in `patterns/`.
 * **Prompt Example**:
   > "Use the thesis-workflow skill to draft my Chapter 3 Method overview. First read `examples/method.md` to learn the logical structure (such as the 'three elements'), then apply the strict Chinese academic rules from the `patterns/` folder to generate the final Chinese text. Use this context: ..."
+
+### Runtime State
+
+The installed skill package should stay reproducible. Do not store personal thesis paths, reference-thesis metadata, or style fingerprints inside `~/.codex/skills/thesis-workflow`. Keep project-specific state under the active thesis project instead:
+
+```text
+.thesis-workflow/
+├── project-profile.md
+├── reference-thesis.md
+└── reference-thesis-fingerprint.md
+```
+
+These files may contain local paths, thesis plans, and reference-thesis excerpts, so they should not be pushed to a public repository by default.
 
 ## Installation (current package)
 

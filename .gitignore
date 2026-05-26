@@ -7,3 +7,6 @@ Thumbs.db
 *.swo
 *~
 *.tmp
+
+# Local thesis workflow state may contain personal paths and reference excerpts
+.thesis-workflow/

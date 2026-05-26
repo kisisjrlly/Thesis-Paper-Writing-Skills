@@ -1,5 +1,7 @@
 # reference-thesis: 范例论文配置
 
+这是模板文件。真实项目中，请先复制到 `<论文项目根目录>/.thesis-workflow/reference-thesis.md`，再填写范例论文信息。不要把个人范例论文路径、作者信息或风格指纹写入安装后的 skill 包目录。
+
 本 skill 依赖**用户指定的范例论文**作为风格基线。不同学科、不同学校、不同导师的毕业论文风格差异很大，没有一本"通用范例"能覆盖所有情况。由你（用户）来决定参照哪一本。
 
 ---
@@ -58,12 +60,12 @@ skill 会自动把信息写到下面的"我的范例论文"区块里，下次不
 
 为了控制 token 成本，skill 采用"指纹"机制：
 
-1. **首次配置范例论文时**（通过对话或手动填本文件），skill 会 Read 一次原文，提取一个约 5-10 KB 的风格指纹，存到 `reference-thesis-fingerprint.md`
+1. **首次配置范例论文时**（通过对话或手动填项目本地 `.thesis-workflow/reference-thesis.md`），skill 会 Read 一次原文，提取一个约 5-10 KB 的风格指纹，存到 `.thesis-workflow/reference-thesis-fingerprint.md`
 2. **后续所有对话**默认只加载指纹文件，不再碰原文，大幅省 token
 3. **指纹不够用时**（需要对照具体表达、或有深度风格对齐需求），skill 会先用 Grep 搜原文关键片段，再不够才局部 Read 原文某章
 4. **范例论文换了**：skill 会自动重新生成指纹
 
-指纹的具体 schema 见 `../references/thesis-polish-protocol.md` 的 "Reference Thesis Mechanism" 章节。你可以直接打开 `reference-thesis-fingerprint.md` 查看提取出的样例，不满意可以要求 skill 重建。
+指纹的具体 schema 见 `../references/thesis-polish-protocol.md` 的 "Reference Thesis Mechanism" 章节。你可以直接打开项目本地 `.thesis-workflow/reference-thesis-fingerprint.md` 查看提取出的样例，不满意可以要求 skill 重建。
 
 ---
 
